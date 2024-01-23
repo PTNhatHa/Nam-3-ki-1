@@ -1,0 +1,71 @@
+package Cau3_UDP;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+public class Cau3_UDP_Server {
+
+	public static void main(String[] args) throws Exception
+	{
+		DatagramSocket serverSocket = new DatagramSocket(7000);
+		System.out.println("Server is started");
+		while(true)
+		{
+			new ClientHandlder(serverSocket).start();
+		}
+	}
+}
+class ClientHandlder extends Thread {
+	DatagramSocket serverSocket;
+	byte[] sendData;
+	byte[] receiveData;
+	
+	public ClientHandlder(DatagramSocket serverSocket) throws IOException{
+		this.serverSocket = serverSocket;
+		sendData = new byte[1024];
+		receiveData = new byte[1024];
+	}
+	public void run()
+	{
+		try {
+			while(true)
+			{
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+				serverSocket.receive(receivePacket);
+				InetAddress IPAddress = receivePacket.getAddress();
+				int port = receivePacket.getPort();
+				
+				String request = new String(receivePacket.getData(), 0, receivePacket.getLength());
+				// Xử lí dl
+				System.out.println(request + "  " + checkFibonaci(Integer.parseInt(request)));
+				String msg = "";
+				if(checkFibonaci(Integer.parseInt(request)) != 0)
+				{
+					msg = "Stop";
+				}
+				sendData = msg.getBytes();
+				DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+				serverSocket.send(sendPacket);
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+		}
+	}
+	public int checkFibonaci(int s)
+	{
+		int t1=0, t2=1, stt=1;
+		int sum = t1 + t2;
+		if(sum==s) return stt;
+		while(sum < s)
+		{
+			t1=t2;
+			t2=sum;
+			sum=t1+t2;
+			stt++;
+		}
+		if(sum==s) return stt;
+		else return 0;
+	}
+}

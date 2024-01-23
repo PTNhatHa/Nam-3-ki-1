@@ -1,0 +1,14 @@
+Fs=44100;
+F0=1000;
+dur=1;
+A=0.5;
+d=A*randn(1,Fs*dur);
+t=0:1/Fs:length(d)/Fs;
+s=cos(2*pi*F0*t);
+x=t+s;
+x1=conv(d,s);
+subplot(3,1,1);
+plot(d(1:1000));
+subplot(3,1,2);
+plot(x1(1:1000));
+sound(x,Fs);

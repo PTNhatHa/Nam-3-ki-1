@@ -1,0 +1,62 @@
+package UDP_Chat;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.HashSet;
+import java.util.Set;
+
+public class UDP_Chat_Server {
+
+	public static void main(String[] args) throws Exception {
+		DatagramSocket serverSocket = new DatagramSocket(7000);
+		System.out.println("Server is started");
+		int count = 1;
+		while(true)
+		{
+			new ClientHandlder(serverSocket).start();
+			count++;
+		}
+	}
+}
+class ClientHandlder extends Thread {
+	DatagramSocket serverSocket;
+	byte[] sendData;
+	byte[] receiveData;
+	static Set<DataOutputStream> writers = new HashSet<>();
+	
+	public ClientHandlder(DatagramSocket serverSocket) throws IOException{
+		this.serverSocket = serverSocket;
+		sendData = new byte[1024];
+		receiveData = new byte[1024];
+	}
+	public void run()
+	{
+		try {
+			while(true)
+			{
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+				serverSocket.receive(receivePacket);
+				InetAddress IPAddress = receivePacket.getAddress();
+				int port = receivePacket.getPort();
+				
+				String request = new String(receivePacket.getData(), 0, receivePacket.getLength());
+				
+				for(DataOutputStream writer : writers)
+				{
+					String msg = "Client " + port + ": " + request + "\n";
+					sendData = msg.getBytes();
+					DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+					serverSocket.send(sendPacket);
+				}
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+		}
+	}
+}

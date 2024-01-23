@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Form55</title>
+        <script>
+            function selectIndex()
+            {
+                var x = document.getElementById("sl1").value;
+                document.form55.t1.value = x
+            }
+        </script>
+    </head>
+    <body onload="document.form55.s1.focus()">
+        <form name="form55" action="">
+            <select id="sl1" name="s1">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <input name="t1" type="text" value="">
+            <input name="b1" type="button" value="OK" onclick="selectIndex()">
+        </form>
+    </body>
+</html>

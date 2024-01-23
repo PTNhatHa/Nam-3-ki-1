@@ -1,0 +1,10 @@
+package Cau3_UDP;
+
+public class Cau3_UDP_Client {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,62 @@
+clear
+close all
+L = 10000;
+n = 0:L-1;
+s = cos(n*pi/5);
+A = 0.1;
+d = A*randn(1,L);
+x = s + d;
+n1 = 0:99;
+
+%Cau a
+figure(1);
+subplot(5,1,1);
+plot(n1,s(1:100));
+title("s[n]");
+subplot(5,1,2);
+plot(n1,d(1:100));
+title("d[n]");
+subplot(5,1,3);
+plot(n1,x(1:100));
+title("x[n]");
+
+%Cau b
+M = input("Nhập M = "); %M=3
+b = (1/(2*M+1))*ones(1,2*M+1);
+a = [1];
+y = filter(b,a,x);
+subplot(5,1,4);
+plot(n1,y(1:100));
+title("y[n]");
+
+Fs = 10000;
+sound(x,Fs);
+pause(3);
+sound(y,Fs);
+
+%Cau c
+% Dịch trái mảng a M lần
+% y1 = [y((M+1):end), zeros(1, M)];
+% subplot(5,1,5);
+% plot(n1,y1(1:100));
+% title("y'[n]");
+
+m = 1;
+y1 = [y((m+1):end), zeros(1, m)];
+min = 0;
+for i=1:1:L
+    min = min + (y1(i) + s(i))^2;
+end
+index = 1;
+for m=2:10
+    y1 = [y((m+1):end), zeros(1, m)];
+    s = 0;
+    for i=0:L-1
+        s = s + (y1(i) + s(i))^2;
+    end
+    if min > s
+        min = s;
+        index = m;
+        disp(index + "---" + s);
+    end
+end

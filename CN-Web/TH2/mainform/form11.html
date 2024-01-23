@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>Form11</title>
+        <script>
+            function ClickOK()
+            {
+                var t1 = document.form11.Username.value
+                var t2 = document.form11.Password.value
+                if(t1 == "" && t2 == "") 
+                {
+                    document.getElementById("txt11").removeAttribute("hidden");
+                    document.form11.txt1.value="Vui lòng điền đầy đủ thông tin!"
+                }
+                else
+                {
+                    if(t1 == "") 
+                    {
+                        document.getElementById("txt11").removeAttribute("hidden");
+                        document.form11.txt1.value="Vui lòng điền username!"
+                    }
+                    else
+                    {
+                        if(t2 == "") 
+                        {
+                            document.getElementById("txt11").removeAttribute("hidden");
+                            document.form11.txt1.value="Vui lòng điền password!"
+                        }
+                        else
+                        {
+                            document.form11.txt1.value=""
+                        }
+                    }
+                }
+            }
+        </script>
+        <style>
+            table{
+                width: 20%;
+            }
+        </style>
+    </head>
+    <body bgcolor="lightgreen">
+        <form name="form11" method="" action="">
+            <table>
+                <caption>Login</caption>
+                <tr>
+                    <td>Username</td>
+                    <td>
+                        <input type="text" name="Username" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input type="password" name="Password" value="">
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="text-align: center">
+                        <input type="button" name="buttonOK" value="OK" onclick="ClickOK()">
+                        <input type="button" name="buttonCancel" value="Cancel">
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" name="txt1" id="txt11" value="" hidden style="background-color: lightgreen; border: 0px; color: red; font-weight: bold; width: 100%;">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>

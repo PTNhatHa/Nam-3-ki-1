@@ -1,0 +1,89 @@
+package Cau2_TCP;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+
+public class Cau2_TCP_Server {
+
+	public static void main(String[] args) throws Exception {
+		ServerSocket socketServer = new ServerSocket(7000);
+		System.out.println("Server is started");
+		while(true)
+		{
+			Socket socket = socketServer.accept();
+			int count = 0;
+			new ClientHandlder(socket, count).start();;
+			count++;
+		}
+	}
+
+}
+class ClientHandlder extends Thread {
+	Socket socketServer;
+	DataInputStream din;
+	DataOutputStream dos;
+	int count;
+	
+	public ClientHandlder(Socket socket, int c) throws IOException{
+		this.socketServer = socket;
+		din = new DataInputStream(socketServer.getInputStream());
+		dos = new DataOutputStream(socketServer.getOutputStream());
+		count = c;
+	}
+	public void run()
+	{
+		try {
+			while(true)
+			{
+				String st = din.readUTF();
+				String bi = toBinary(Integer.parseInt(st));
+				System.out.println(bi);
+				System.out.println(checkBinary(bi));
+				String msg = "";
+				if(checkBinary(bi) == false)
+				{
+					msg = "Stop";
+				}
+				dos.writeUTF(msg);
+				dos.flush();
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+		}
+	}
+	public String toBinary(int s)
+	{
+		String b = "";
+		b = Integer.toBinaryString(s);
+		String b8 = "";
+		if(b.length() < 8)
+		{
+			for(int i=0; i< 8 - b.length(); i++)
+			{
+				b8 += "0";
+			}
+			b8 += b;
+		}
+		else
+		{
+			b8 = b;
+		}
+		return b8;
+	}
+	public boolean checkBinary(String b8)
+	{
+		char[] bi = b8.toCharArray();
+		int l=0, r=7;
+		while(l<r)
+		{
+			if(bi[l] != bi[r]) return false;
+			l++;
+			r--;
+		}
+		return true;
+	}
+}

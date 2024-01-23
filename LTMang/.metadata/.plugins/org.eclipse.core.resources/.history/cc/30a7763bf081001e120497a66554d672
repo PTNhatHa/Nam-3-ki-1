@@ -1,0 +1,116 @@
+package UDP_Tinhtoan;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.util.Stack;
+
+public class UDP_Tinhtoan_Server {
+
+	public static void main(String[] args) throws Exception
+	{
+		DatagramSocket serverSocket = new DatagramSocket(7000);
+		System.out.println("Server is started");
+		while(true)
+		{
+			new ClientHandlder(serverSocket).start();
+		}
+	}
+}
+class ClientHandlder extends Thread {
+	DatagramSocket serverSocket;
+	byte[] sendData;
+	byte[] receiveData;
+	
+	public ClientHandlder(DatagramSocket serverSocket) throws IOException{
+		this.serverSocket = serverSocket;
+		sendData = new byte[1024];
+		receiveData = new byte[1024];
+	}
+	public void run()
+	{
+		try {
+			while(true)
+			{
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+				serverSocket.receive(receivePacket);
+				InetAddress IPAddress = receivePacket.getAddress();
+				
+				int port = receivePacket.getPort();
+				
+				String request = new String(receivePacket.getData(), 0, receivePacket.getLength());
+				// Xử lí dl
+				String msg = request + " = " + String.valueOf(evaluate(request));
+				sendData = msg.getBytes();
+				DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+				serverSocket.send(sendPacket);
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+		}
+	}
+	public static boolean delim(char c) {
+        return c == ' ';
+    }
+
+    public static boolean is_op(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/';
+    }
+
+    public static int priority(char op) {
+        if (op == '+' || op == '-')
+            return 1;
+        if (op == '*' || op == '/')
+            return 2;
+        return -1;
+    }
+
+    public static void process_op(Stack<Double> st, char op) {
+        double r = st.pop();
+        double l = st.pop();
+        switch (op) {
+            case '+': st.push(l + r); break;
+            case '-': st.push(l - r); break;
+            case '*': st.push(l * r); break;
+            case '/': st.push(l / r); break;
+        }
+    }
+    public static double evaluate(String s) {
+        Stack<Double> st = new Stack<>();
+        Stack<Character> op = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (delim(s.charAt(i)))
+                continue;
+
+            if (s.charAt(i) == '(') {
+                op.push('(');
+            } else if (s.charAt(i) == ')') {
+                while (op.peek() != '(') {
+                    process_op(st, op.peek());
+                    op.pop();
+                }
+                op.pop();
+            } else if (is_op(s.charAt(i))) {
+                char cur_op = s.charAt(i);
+                while (!op.empty() && priority(op.peek()) >= priority(cur_op)) {
+                    process_op(st, op.peek());
+                    op.pop();
+                }
+                op.push(cur_op);
+            } else {
+                double number = 0;
+                while (i < s.length() && Character.isDigit(s.charAt(i)))
+                    number = number * 10 + s.charAt(i++) - '0';
+                --i;
+                st.push(number);
+            }
+        }
+
+        while (!op.empty()) {
+            process_op(st, op.peek());
+            op.pop();
+        }
+        return st.peek();
+    }
+}

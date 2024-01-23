@@ -1,0 +1,114 @@
+package UDP_CSDL;
+
+import java.awt.FlowLayout;
+import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import UDP_Tinhtoan.UDP_Tinhtoan_Client;
+
+public class UDP_CSDL_Client extends JFrame {
+
+	TextArea output;
+	JTextField input;
+	static DatagramSocket clientSocket;
+	byte[] sendData = new byte[1024];
+	byte[] receiveData = new byte[1024];
+	
+	public static void main(String[] args) throws Exception {
+		clientSocket = new DatagramSocket();
+		new UDP_CSDL_Client();
+	}
+	private void sendMessage() throws IOException
+	{
+		InetAddress IPAddress = InetAddress.getByName("localhost");		
+		String msg = input.getText();
+		if(!msg.isEmpty())
+		{
+			try {
+				sendData = msg.getBytes();
+				DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 7000);
+				clientSocket.send(sendPacket);
+	
+			} catch (IOException e) {
+				e.printStackTrace();
+				output.setText("Thất bại");
+			}	
+		}
+	}
+	UDP_CSDL_Client()
+	{
+		this.setTitle("Client");
+		this.setSize(500, 300);
+		this.setDefaultCloseOperation(3);
+		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		
+		JPanel p = new JPanel();
+		p.setLayout(new FlowLayout());
+		JLabel lb = new JLabel("Nhập tên bảng ghi cần truy vấn: ");
+		p.add(lb);
+		input = new JTextField(20);
+		p.add(input);
+		JButton b1 = new JButton("Truy vấn");
+		new Thread(new Runnable() {
+            public void run() {
+                try {
+                	while(true) {
+                    	DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+						clientSocket.receive(receivePacket);
+						String remess = new String(receivePacket.getData());
+						output.append("\n" + remess);
+                        Thread.sleep(1000);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    output.setText("Gửi thất bại");
+                } catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					output.setText("Gửi thất bại");
+				}
+            }
+        }).start();	
+		b1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					sendMessage();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		JButton b2 = new JButton("Close");
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		p.add(b1);
+		p.add(b2);
+		this.add(p);
+		
+		output = new TextArea();
+		output.setEditable(false);
+		this.add(output);
+	}
+}
+

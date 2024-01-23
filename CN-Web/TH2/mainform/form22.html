@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <script>
+            function AddId(stt)
+            {
+                with(this)
+                {
+                    id = stt;
+                }
+            }
+            function Student(name, gender, class1)
+            {
+                this.name = name;
+                this.gender = gender;
+                this.class1 = class1;
+                this.id = 0;
+                this.AddId = AddId;
+            }
+        </script>
+    </head>
+    <body>
+        <form name="form22" action="">
+            <script>
+                var MyStudent = new Student("Phan Trần Nhật Hạ", "Nữ", "21TCLC_DT2");
+                MyStudent.AddId("102210159");
+                document.write("Student id is: " + MyStudent.id + "<br>");
+                document.write("Student name is: " + MyStudent.name + "<br>");
+                document.write("Student gender is: " + MyStudent.gender + "<br>");
+                document.write("Student class is: " + MyStudent.class1 + "<br>");
+            </script>
+        </form>
+    </body>
+</html>

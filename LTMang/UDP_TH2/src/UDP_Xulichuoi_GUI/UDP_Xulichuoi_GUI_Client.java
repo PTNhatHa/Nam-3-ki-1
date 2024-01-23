@@ -1,0 +1,80 @@
+package UDP_Xulichuoi_GUI;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.net.*;
+import javax.swing.*;
+
+public class UDP_Xulichuoi_GUI_Client extends JFrame{
+
+	private TextArea input, output;
+	static DatagramSocket clientSocket;
+	
+	public static void main(String[] args) throws IOException {
+		clientSocket = new DatagramSocket();
+		new UDP_Xulichuoi_GUI_Client();
+	}
+	
+	UDP_Xulichuoi_GUI_Client()
+	{
+		this.setTitle("Client");
+		this.setSize(500, 500);
+		this.setDefaultCloseOperation(3);
+		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		
+		JLabel t1 = new JLabel("Output");
+		this.add(t1);
+		output = new TextArea();
+		output.setEditable(false);
+		this.add(output);
+		JLabel t2 = new JLabel("Input");
+		this.add(t2);
+		input = new TextArea();
+		this.add(input);
+		JButton b = new JButton("Send");
+		
+		
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					InetAddress IPAddress = InetAddress.getByName("localhost");
+					byte[] sendData = new byte[1024];
+					byte[] receiveData = new byte[1024];
+					String msg = input.getText();
+					sendData = msg.getBytes();
+					DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 7000);
+					clientSocket.send(sendPacket);
+					new Thread(new Runnable() {
+						public void run() {
+							try {
+								while(true)
+								{
+									DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+									clientSocket.receive(receivePacket);
+									String remess = new String(receivePacket.getData());
+									output.append("\n" + remess);
+									Thread.sleep(1000);
+								}
+								
+							} catch (IOException | InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}).start();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+		});
+		this.add(b);
+		setVisible(true);
+	}
+
+}

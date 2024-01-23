@@ -1,0 +1,4 @@
+INDEX VERSION 1.4+D:\LEARNING\DaiHoc\HK5\LTMang\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2592703251.index
+3020376301.index
+3926870706.index

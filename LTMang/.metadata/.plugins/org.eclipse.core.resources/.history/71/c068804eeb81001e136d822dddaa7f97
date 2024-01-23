@@ -1,0 +1,10 @@
+package UDP_Tinhtoan;
+
+public class UDP_Tinhtoan_Client {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

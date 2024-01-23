@@ -1,0 +1,60 @@
+package UDP_CSDL;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.sql.*;
+
+public class UDP_CSDL_Server {
+
+	public static void main(String[] args) throws Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		String url = "jdbc:mysql://localhost:3306/dulieu";
+		String user = "root";
+		String password = "";
+		Connection cnt = (Connection) DriverManager.getConnection(url, user, password);
+		
+		String query = "SELECT * FROM admin";
+		Statement st = cnt.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int columnCount = rsmd.getColumnCount();
+		String msg = "";
+		while(rs.next())
+		{
+			for (int i = 1; i <= columnCount; i++) 
+			{
+			    msg += rs.getObject(i) + "\t";
+			}
+			msg += "\n";
+		}
+		// UDP
+		DatagramSocket serverSocket = new DatagramSocket(7000);
+		System.out.println("Server is started");
+		byte[] sendData = new byte[1024];
+		byte[] receiveData = new byte[1024];
+		while(true)
+		{
+			// Nhận dl
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			serverSocket.receive(receivePacket);
+			InetAddress IPAddress = receivePacket.getAddress();
+			int port = receivePacket.getPort();
+			String request = new String(receivePacket.getData(), 0, receivePacket.getLength());
+			System.out.println(request);
+			if(request.trim().equals("ConnectDB"))
+			{
+				sendData = msg.getBytes();
+			}
+			else
+			{
+				sendData = "Server not know what you want".getBytes();
+			}
+			// Gửi dl
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+			serverSocket.send(sendPacket);
+		}
+	}
+
+}

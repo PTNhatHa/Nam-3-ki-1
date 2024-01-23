@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Form44</title>
+        <script>
+            function selectID()
+            {
+                var c = document.form44.t1.value
+                document.form44.s1.selectedIndex = c
+            }
+        </script>
+    </head>
+    <body onload="document.form44.t1.focus()">
+        <form name="form44" action="">
+            <select name="s1">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <input name="t1" type="text" value="">
+            <input name="b1" type="button" value="OK" onclick="selectID()">
+        </form>
+    </body>
+</html>

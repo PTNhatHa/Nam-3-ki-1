@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <script>
+            function selectID()
+            {
+                var c = document.f1.t1.value
+                document.f1.s1.selectedIndex = c
+            }
+        </script>
+    </head>
+    <body onload="document.f1.t1.focus()">
+        <form name="f1" action="">
+            <select name="s1">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <input name="t1" type="text" value="">
+            <input name="b1" type="button" value="OK" onclick="selectID()">
+        </form>
+    </body>
+</html>
+<!-- đọc cách sd HĐT vs JAVASCRIPT, cách sd từ khóa WITH => slide --> alert

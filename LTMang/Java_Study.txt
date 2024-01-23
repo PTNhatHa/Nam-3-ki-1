@@ -1,0 +1,1 @@
+khuyến cáo ko nên dùng synchronized => dễ tạo deadlock

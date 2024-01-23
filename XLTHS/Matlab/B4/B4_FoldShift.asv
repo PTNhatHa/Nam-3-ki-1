@@ -1,0 +1,38 @@
+xn = 0:4; % index
+x = 5:-1:1;
+k = 2;
+
+% (a) First folding, then shifting
+yn1 = -xn(end):-xn(1);
+y1 =  x(length(xn)):x(1);
+yn1 = yn1 + k;
+
+% (b) First shifting, then folding
+yn2 = xn + k;
+yn2 = -yn2(end):-yn2(1);
+y2 =  x(length(xn)):x(1);
+
+%Plot
+xylimit = [min([xn(1),yn1(1),yn2(1)])-1,max([xn(end),yn1(end)...
+,yn2(end)])+1,min(x)-1,max(x)+1];
+
+subplot(3,1,1);
+stem(xn,x,"filled");
+axis(xylimit);
+xlabel("x[n]");
+ylabel("n");
+title("x[n]");
+
+subplot(3,1,2);
+stem(yn1,y1,"filled");
+axis(xylimit);
+xlabel("y1[n]");
+ylabel("n");
+title("(a) y1[n]: First folding, then shifting");
+
+subplot(3,1,3);
+stem(yn2,y2,"filled");
+axis(xylimit);
+xlabel("y2[n]");
+ylabel("n");
+title("y2[n]: First shifting, then folding");

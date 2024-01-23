@@ -1,0 +1,128 @@
+<html>
+    <head>
+        <title>Form3 top</title>
+        <style>
+            table{
+                width: 100%;
+            }
+            a{
+                color: black;
+                text-decoration: none;
+                padding: 10px 10px 10px 14px;
+                text-align: center;
+                font-weight: bold;
+            }
+            .menu{
+                width: 100%;
+            }
+            .top{
+                padding: 2px 5px;
+                background-color: rgba(133, 131, 131, 0.3);
+            }
+            ul{
+                list-style-type: none;
+            }
+            li{
+                display: inline-block;
+                
+            }
+            div{
+                display: inline-block;
+                width: 100%;
+                /* margin-bottom: 10px; */
+            }
+            .search{
+                border-radius: 20px;
+                border: 1px solid rgb(135, 135, 135);
+                width: 50%;
+            }
+            .btsearch{
+                float: right;
+                background: url(../img/sprite.png) no-repeat -47px -4px; 
+                width: 30px;
+                height: 30px;
+                border: 0;
+            }
+            .txt-search{
+                background: transparent;
+                height: 30px;
+                width: 75%;
+                line-height: 26px;
+                color: #757575;
+                font-size: 12px;
+                border: 0;
+            }
+            .menu{
+                font-family: "Open Sans", Arial, sans-serif;
+            }
+            a:hover{
+                color: #106cb2;
+                border-bottom: 5px solid #106cb2;
+            }
+            .bot ul{
+                padding: 8px 15px;
+                margin: 0%;
+                list-style: none;
+                background-color: #e8e8e8;
+                border-radius: 4px;
+                font-family: "Open Sans", Arial, sans-serif;
+            }
+            .menu > ul > li ul {
+                /* display: none; */
+                background-color: #FFF;
+                width: 240px;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                box-shadow: 0 0 1px rgba(0,0,0,0.1);
+                border: 1px solid #eee;
+                /* z-index: 9999; */
+            }
+            
+        </style>
+    </head>
+    <body style="overflow: hidden;">
+        <form name="f3_top" action="">
+            <div style="width: 150%; height: 20px; background-color: #106cb2; margin-top: -10px; margin-left: -10px;"></div>
+            <div>
+                <table>
+                    <tr>
+                        <td style="text-align: left;">
+                            <img src="../img/logo-k_cntt.png" alt="logo">
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="search">
+                                <input class="txt-search" type="text" placeholder="Tìm kiếm thông tin">
+                                <input class="btsearch" type="submit" value="">
+                            </div>
+                        </li>
+                    </tr>
+                </table>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href='f3_HOME.html' target="f3_main">HOME</a></li>
+                    <li>
+                        <a href='f3_GIOITHIEU.html' target="f3_main">GIỚI THIỆU</a>
+                        <ul> 
+                            <!-- li*3>a -->
+                            <li><a href="">Tầm nhìn</a></li>
+                            <li><a href="">Kế hoạch</a></li>
+                            <li><a href="">Chung</a></li>
+                        </ul>
+                    </li>
+                    <li><a href='f3_TUYENSINH.html' target="f3_main">TUYỂN SINH</a></li>
+                    <li><a href='f3_DAOTAO.html' target="f3_main">ĐÀO TẠO</a></li>
+                    <li><a href='f3_NCKH.html' target="f3_main">NGHIÊN CỨU KHOA HỌC</a></li>
+                    <li><a href='f3_HOPTAC.html' target="f3_main">HỢP TÁC</a></li>
+                    <li><a href='f3_SINHVIEN.html' target="f3_main">SINH VIÊN</a></li>
+                    <li><a href='f3_CUUSV.html' target="f3_main">CỰU SINH VIÊN</a></li>
+                    <li><a href='f3_LIENHE.html' target="f3_main">LIÊN HỆ</a></li>
+                </ul>
+            </div>  
+            <div class="bot">
+                <ul><li>Trang chủ</li></ul>
+            </div>
+        </form>
+    </body>
+</html>

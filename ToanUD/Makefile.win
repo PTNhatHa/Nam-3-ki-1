@@ -1,0 +1,28 @@
+# Project: Eigen
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = Eigen/test.o
+LINKOBJ  = Eigen/test.o
+LIBS     = -L"D:/LEARNING/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -lws2_32 -L"D:/LEARNING/eigen-3.4.0"
+INCS     = -I"D:/LEARNING/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
+CXXINCS  = -I"D:/LEARNING/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"D:/LEARNING/eigen-3.4.0"
+BIN      = Eigen.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+Eigen/test.o: Eigen/test.cpp
+	$(CPP) -c Eigen/test.cpp -o Eigen/test.o $(CXXFLAGS)

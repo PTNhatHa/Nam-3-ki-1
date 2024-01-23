@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Form33</title>
+        <meta charset="utf-8">
+        <script>
+            function hoathuong()
+            {
+                var s = document.form33.t1.value;
+                let result = '';
+                for(let i=0; i < s.length; i++)
+                {
+                    var ch = s.charCodeAt(i); //trả về mã ASCII của kí tự tại i
+                    if (ch >= 97 && ch <= 122) 
+                    {
+                        result += String.fromCharCode(ch - 32);
+                    } 
+                    else 
+                    {
+                        if (ch >= 65 && ch <= 90) 
+                        {
+                            result += String.fromCharCode(ch + 32);
+                        } 
+                        else
+                        {
+                            result += str.charAt(i);
+                        }
+                    }
+                }
+                document.form33.t2.value = result 
+            }
+        </script>
+    </head>
+    <body onload="document.form33.t1.focus()">
+        <form name="form33" action="">
+            <input name="t1" type="text" onblur="hoathuong()">
+            <input name="t2" type="text">
+        </form>
+    </body>
+</html>

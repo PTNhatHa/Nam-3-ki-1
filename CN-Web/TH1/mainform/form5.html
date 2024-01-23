@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Form5</title>
+        <script lang="JavaScript">
+            function Upcase()
+            {
+                var t = document.form5.txt.value
+                document.form5.txt.value = t.toUpperCase()
+            }
+        </script>
+    </head>
+    <body>
+        <form name="form5" action="">
+            <input name="txt" type="text" value="" onblur="Upcase()">
+        </form>
+    </body>
+</html>

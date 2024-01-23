@@ -1,0 +1,107 @@
+package UDP_Chat;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+public class UDP_Chat_Server {
+
+	public static void main(String[] args) throws Exception {
+		DatagramSocket serverSocket = new DatagramSocket(7000);
+		System.out.println("Server is started");
+		int count = 1;
+		while(true)
+		{
+			new ClientHandlder(serverSocket, count).start();
+			count++;
+		}
+	}
+}
+class ClientHandlder extends Thread {
+	DatagramSocket serverSocket;
+	byte[] sendData;
+	byte[] receiveData;
+	static List<ClientInfo> clients = new ArrayList<>();
+	int count;
+	
+	public ClientHandlder(DatagramSocket serverSocket, int count) throws IOException{
+		this.serverSocket = serverSocket;
+		sendData = new byte[1024];
+		receiveData = new byte[1024];
+		this.count = count;
+	}
+	public void run()
+	{
+		try {
+			while(true)
+			{
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+				serverSocket.receive(receivePacket);
+				InetAddress IPAddress = receivePacket.getAddress();
+				int port = receivePacket.getPort();
+				ClientInfo clientInfo = new ClientInfo(IPAddress, port);
+				if(!clients.contains(clientInfo))
+				{
+					clients.add(clientInfo);
+				}
+				String request = new String(receivePacket.getData(), 0, receivePacket.getLength());
+				if(!request.trim().equals("Client is started"))
+				{
+					for(ClientInfo client : clients)
+					{
+						String msg = "Client " + (clients.indexOf(clientInfo) + 1) + ": " + request + "\n";
+						sendData = msg.getBytes();
+						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, client.getIPAddress(), client.getPort());
+						serverSocket.send(sendPacket);
+					}
+				}
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+		}
+	}
+}
+
+class ClientInfo 
+{
+	private InetAddress IPAddress;
+	private int port;
+	public ClientInfo(InetAddress IPAddress, int port)
+	{
+		this.IPAddress = IPAddress;
+		this.port = port;
+	}
+	public InetAddress getIPAddress()
+	{
+		return this.IPAddress;
+	}
+	public int getPort()
+	{
+		return this.port;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ClientInfo)) return false;
+		ClientInfo clientInfo = (ClientInfo) o;
+		return port == clientInfo.port &&
+				IPAddress.equals(clientInfo.IPAddress);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(IPAddress, port);
+	}
+}
